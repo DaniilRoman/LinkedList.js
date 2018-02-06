@@ -4,7 +4,6 @@ class LinkedList {
         this.length = 0;
         this.head = new Node();
         this.tail = new Node();
-        console.log(arguments);
         for (let i = 0; i < arguments.length; i++) {
             this.push(arguments[i]);
         }
