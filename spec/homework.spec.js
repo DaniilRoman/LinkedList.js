@@ -59,4 +59,18 @@ describe("A spec", ()=>{
         expect(list.reverse().toString()).toBe('[{}, "dsfs", 44, 23, 1]');
     });
 
+    it('List for(i of list) returns correct string representation of the list', () => {
+        a = [];
+        for(let i of list){
+            a.push(i.data);
+            }
+        b = [1, 23, 44, "dsfs", {}];
+        expect(a.toString()).toBe(b.toString());
+    });
+    it('List list.forEach() returns correct string representation of the list', () => {
+        a = [];
+        list.forEach((element, index, array) => a.push(element));
+        b = [1, 23, 44, "dsfs", {}];
+        expect(a.toString()).toBe(b.toString());
+    });
 });

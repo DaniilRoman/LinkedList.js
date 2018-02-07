@@ -5,7 +5,6 @@ class LinkedList {
         this.length = 0;
         this.head = new Node();
         this.tail = new Node();
-        this.current = this.head;
         for (let i = 0; i < arguments.length; i++) {
             this.push(arguments[i]);
         }
@@ -57,16 +56,22 @@ class LinkedList {
                 this.length++;
             }
         }
-        if(this.head.next) this.current = this.head;
     };
 
     unshift() {
-        for (let i = arguments.length - 1; i >= 0; i--) {
+        for (let i = arguments.length-1; i >=0; i--) {
             let node = new Node(arguments[i]);
-            this.head.previous = node;
-            node.next = this.head;
-            this.head = node;
-            this.length++;
+            if (this.length) {
+                this.head.previous = node;
+                node.next = this.head;
+                this.head = node;
+                this.length++;
+            }
+            else {
+                this.head = node;
+                this.tail = node;
+                this.length++;
+            }
         }
     };
 
@@ -95,21 +100,19 @@ class LinkedList {
 
     toString() {
         let listStr = "[";
-        for (let i = 0; i < this.length - 1; i++) {
+        for (let i = 0; i < this.length; i++) {
             let data = this.get(i);
             listStr += JSON.stringify(data) + ", ";
         }
-        listStr += JSON.stringify(this.get(this.length - 1)) + "]";
-        return listStr;
+        let result = listStr.slice(0,listStr.length-2)+"]";
+        return result;
     };
 
     reverse() {
         let tempList = new LinkedList();
-
-        for (let i = 0; i < this.length; i++) {
+ for (let i = 0; i < this.length; i++) {
             tempList.unshift(this.get(i));
         }
-
         this.tail = tempList.tail;
         this.head = tempList.head;
         return this
@@ -129,8 +132,8 @@ class LinkedList {
     }
 
     [Symbol.iterator]() {
-        let current = this.current;
-        let last = this.current.next;
+        let current = this.head;
+        let last = this.head.next;
         let pre = null;
 
         return {
@@ -149,15 +152,22 @@ class LinkedList {
                     };
                 }
             }
-            // return{
-            //     last : current.next,
-            //     next: () => ({ value: current, done: !last})
         }
     }
 
-    // foreach(collback){
-    //     for()
-    // }
+    forEach(collback) {
+        if (typeof collback  === 'function') {
+            let tempNode = this.head,
+                index = 0;
+            while(tempNode){
+                collback(tempNode.data, index, this);
+                tempNode = tempNode.next;
+                index++;
+            }
+        } else {
+            console.log("Need function");
+        }
+    }
 }
 
 function Node(value) {
