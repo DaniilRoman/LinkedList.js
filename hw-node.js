@@ -1,9 +1,11 @@
 class LinkedList {
 
+
     constructor() {
         this.length = 0;
         this.head = new Node();
         this.tail = new Node();
+        this.current = this.head;
         for (let i = 0; i < arguments.length; i++) {
             this.push(arguments[i]);
         }
@@ -92,11 +94,11 @@ class LinkedList {
 
     toString() {
         let listStr = "[";
-        for (let i = 0; i < this.length-1; i++) {
+        for (let i = 0; i < this.length - 1; i++) {
             let data = this.get(i);
             listStr += JSON.stringify(data) + ", ";
         }
-        listStr += JSON.stringify(this.get(this.length-1)) + "]";
+        listStr += JSON.stringify(this.get(this.length - 1)) + "]";
         return listStr;
     };
 
@@ -111,6 +113,40 @@ class LinkedList {
         this.head = tempList.head;
         return this
     };
+
+    sort() {
+        for (let i = 0; i < this.length - 1; i++) {
+            for (let j = i; j < this.length - i - 1; j++) {
+                let value1 = this.get(j),
+                    value2 = this.get(j + 1);
+                if (value1 > value2) {
+                    this.get(j, false).data = value2;
+                    this.get(j + 1, false).data = value1;
+                }
+            }
+        }
+    }
+
+    [Symbol.iterator]() {
+        let current = this.current;
+        let last = this.current.next;
+
+        return {
+            next() {
+                if (last) {
+                    this.current = last;
+                    return {
+                        done: false,
+                        value: current
+                    };
+                } else {
+                    return {
+                        done: true
+                    };
+                }
+            }
+        }
+    }
 }
 
 function Node(value) {
