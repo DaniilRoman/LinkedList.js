@@ -57,6 +57,7 @@ class LinkedList {
                 this.length++;
             }
         }
+        if(this.head.next) this.current = this.head;
     };
 
     unshift() {
@@ -130,23 +131,33 @@ class LinkedList {
     [Symbol.iterator]() {
         let current = this.current;
         let last = this.current.next;
+        let pre = null;
 
         return {
             next() {
-                if (last) {
-                    this.current = last;
+                if (current) {
+                    pre = current;
+                    current = last;
+                    current ? last = current.next : last = null;
                     return {
                         done: false,
-                        value: current
+                        value: pre
                     };
                 } else {
                     return {
-                        done: true
+                        done: true,
                     };
                 }
             }
+            // return{
+            //     last : current.next,
+            //     next: () => ({ value: current, done: !last})
         }
     }
+
+    // foreach(collback){
+    //     for()
+    // }
 }
 
 function Node(value) {
